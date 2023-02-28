@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Eng to Jap</title>
+
+    <style>
+      @keyframes fadein {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      body {
+        animation: fadein 1s;
+        color: ivory;
+        background-color: #353535;
+        text-align: center;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      .clable:hover {
+        color: lightblue;
+      }
+
+      .list {
+        font-size: 20px;
+        display: inline-block;
+      }
+
+      input {
+        width: 75px;
+        height: 30px;
+        font-size: 20px;
+        background-color: ivory;
+        text-align: center;
+        color: #353535;
+      }
+
+      ::placeholder {
+        color: #353535;
+        opacity: 0.8;
+      }
+
+      ::-webkit-scrollbar {
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Eng to Jap</h1>
+
+    <div id="translate" style="margin-top: 50px; margin-bottom: 50px">
+      <input type="text" name="" id="trbox" placeholder="sound" />
+
+      <h1 id="res" class="clable" onclick="copy()">(result)</h1>
+      <h2 id="snd" class="clable" onclick="read()">(sounds)</h2>
+    </div>
+
+    <div class="list">
+      hiragana list<br />
+      あa いi うu えe おo<br />
+      かka きki くku けke こko<br />
+      さsa しshi すsu せse そso<br />
+      たta ちchi つtsu てte とto<br />
+      なna にni ぬnu ねne のno<br />
+      はha ひhi ふhu へhe ほho<br />
+      まma みmi むmu めme もmo<br />
+      やya ゆyu よyo<br />
+      らra りri るru れre ろro<br />
+      わwa ゐwi ゑwe をwo<br />
+      んn<br />
+    </div>
+
+    <div class="list" style="padding-left: 100px">
+      katakana list<br />
+      アa イi ウu エe オo<br />
+      カka キki クku ケke コko<br />
+      サsa シshi スsu セse ソso<br />
+      タta チchi ツtsu テte トto<br />
+      ナna ニni ヌnu ネne ノno<br />
+      ハha ヒhi フhu ヘhe ホho<br />
+      マma ミmi ムmu メme モmo<br />
+      ヤya ユyu ヨyo<br />
+      ラra リri ルru レreロro<br />
+      ワwa ヰwi ヱwe ヲwo<br />
+      ンn<br />
+    </div>
+
+    <script>
+      const trbox = document.querySelector('#trbox');
+      const res = document.querySelector('#res');
+      const snd = document.querySelector('#snd');
+
+      const hiralist = {
+        dt: '。',
+        a: 'あ',
+        i: 'い',
+        u: 'う',
+        e: 'え',
+        o: 'お',
+        ka: 'か',
+        ki: 'き',
+        ku: 'く',
+        ke: 'け',
+        ko: 'こ',
+        sa: 'さ',
+        shi: 'し',
+        su: 'す',
+        se: 'せ',
+        so: 'そ',
+        ta: 'た',
+        chi: 'ち',
+        tsu: 'つ',
+        te: 'て',
+        to: 'と',
+        na: 'な',
+        ni: 'に',
+        nu: 'ぬ',
+        ne: 'ね',
+        no: 'の',
+        ha: 'は',
+        hi: 'ひ',
+        hu: 'ふ',
+        he: 'へ',
+        ho: 'ほ',
+        ma: 'ま',
+        mi: 'み',
+        mu: 'む',
+        me: 'め',
+        mo: 'も',
+        ya: 'や',
+        yu: 'ゆ',
+        yo: 'よ',
+        ra: 'ら',
+        ri: 'り',
+        ru: 'る',
+        re: 'れ',
+        ro: 'ろ',
+        wa: 'わ',
+        wi: 'ゐ',
+        we: 'ゑ',
+        wo: 'を',
+        n: 'ん',
+      };
+
+      const katalist = {
+        dt: '。',
+        a: 'ア',
+        i: 'イ',
+        u: 'ウ',
+        e: 'エ',
+        o: 'オ',
+        ka: 'カ',
+        ki: 'キ',
+        ku: 'ク',
+        ke: 'ケ',
+        ko: 'コ',
+        sa: 'サ',
+        shi: 'シ',
+        su: 'ス',
+        se: 'セ',
+        so: 'ソ',
+        ta: 'タ',
+        chi: 'チ',
+        tsu: 'ツ',
+        te: 'テ',
+        to: 'ト',
+        na: 'ナ',
+        ni: 'ニ',
+        nu: 'ヌ',
+        ne: 'ネ',
+        no: 'ノ',
+        ha: 'ハ',
+        hi: 'ヒ',
+        hu: 'フ',
+        he: 'ヘ',
+        ho: 'ホ',
+        ma: 'マ',
+        mi: 'ミ',
+        mu: 'ム',
+        me: 'メ',
+        mo: 'モ',
+        ya: 'ヤ',
+        yu: 'ユ',
+        yo: 'ヨ',
+        ra: 'ラ',
+        ri: 'リ',
+        ru: 'ル',
+        re: 'レ',
+        ro: 'ロ',
+        wa: 'ワ',
+        wi: 'ヰ',
+        we: 'ヱ',
+        wo: 'ヲ',
+        n: 'ン',
+      };
+
+      let dellen = [
+        [
+          '。',
+          'あ',
+          'い',
+          'う',
+          'え',
+          'お',
+          'ん',
+          'ア',
+          'イ',
+          'ウ',
+          'エ',
+          'オ',
+          'ン',
+        ],
+        ['し', 'ち', 'つ', 'シ', 'チ', 'ツ'],
+      ];
+    </script>
+    <script>
+      res.innerText = localStorage.getItem('res') || '(result)';
+      snd.innerText = localStorage.getItem('snd') || '(sound)';
+    </script>
+    <script>
+      trbox.addEventListener('input', function () {
+        const dat = event.data;
+        if (dat === ';' || dat === ':') {
+          const conv = document
+            .querySelector('#trbox')
+            .value.substr(0, document.querySelector('#trbox').value.length - 1)
+            .toLowerCase();
+          console.log(`conv ${conv} in ${dat === ';' ? 'hira' : 'kata'}`);
+
+          let jap;
+          if (dat === ';') {
+            jap = hiralist[conv] ?? '';
+            console.log(jap);
+          } else if (dat === ':') {
+            jap = katalist[conv] ?? '';
+            console.log(jap);
+          }
+
+          if (conv !== 'rs' && conv !== 'bs' && jap !== '') {
+            if (res.innerText === '(result)') {
+              res.innerText = '';
+              snd.innerText = '';
+            }
+
+            res.innerText += jap;
+
+            if (conv === 'dt') {
+              snd.innerText += '.';
+            } else {
+              snd.innerText += conv;
+            }
+          } else if (conv === 'rs') {
+            res.innerText = '(result)';
+            snd.innerText = '(sounds)';
+          } else if (
+            conv === 'bs' &&
+            res.innerText !== '(result)' &&
+            res.innerText !== null
+          ) {
+            const del = res.innerText.charAt(res.innerText.length - 1);
+            res.innerText = res.innerText.substr(0, res.innerText.length - 1);
+
+            if (dellen[0].includes(del)) {
+              snd.innerText = snd.innerText.substr(0, snd.innerText.length - 1);
+            } else if (dellen[1].includes(del)) {
+              snd.innerText = snd.innerText.substr(0, snd.innerText.length - 3);
+            } else {
+              snd.innerText = snd.innerText.substr(0, snd.innerText.length - 2);
+            }
+
+            if (res.innerText === '') {
+              res.innerText = '(result)';
+              snd.innerText = '(sounds)';
+            }
+          }
+
+          document.querySelector('#trbox').value = null;
+          localStorage.setItem('res', res.innerText);
+          localStorage.setItem('snd', snd.innerText);
+        }
+      });
+
+      function read() {
+        if (
+          typeof SpeechSynthesisUtterance === 'undefined' ||
+          typeof window.speechSynthesis === 'undefined'
+        ) {
+          alert('error'); // can't load speech function
+          return;
+        }
+
+        window.speechSynthesis.cancel(); // stop sound
+
+        const speechMsg = new SpeechSynthesisUtterance();
+        speechMsg.rate = 0.7; // 0.1 ~ 10
+        speechMsg.pitch = 1; // 0 ~ 2
+        speechMsg.lang = 'ja-JP';
+        speechMsg.text = document.querySelector('#res').innerText;
+
+        window.speechSynthesis.speak(speechMsg);
+        console.log(`spoke ${speechMsg.text}`);
+      }
+
+      function copy() {
+        const text = document.querySelector('#res').innerText;
+
+        if (text === '(result)') {
+          console.log('copy cancelled');
+        } else {
+          navigator.clipboard.writeText(text);
+          console.log(`copied ${text}`);
+        }
+      }
+    </script>
+  </body>
+</html>
